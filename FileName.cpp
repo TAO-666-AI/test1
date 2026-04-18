@@ -1,61 +1,57 @@
 #include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <chrono>
 using namespace std;
-int main()
-{
-	srand(static_cast<unsigned int>(time(nullptr)));
-	int numQuestions = 20,num1,num2,result;
-	int correctAnswer = 0,answer;
-	char sign1 = '+',sign2='-';
-	char plus[] = "隆脕";
-	char divide[] = "隆脗";
-	auto start = chrono::system_clock::now();
-	for (int i = 0; i < numQuestions / 4; i++) {
-		for (int j=0; j < 4; j++) {
-			switch (j) {
-			case 0:
-				  do {
-					num1 = rand() % 100 + 1;
-					num2 = rand() % 100 + 1;
-					result = num1 + num2;
-				  } while (result > 100); 
-				  cout << num1 << sign1 << num2 << '=' << " ";
-				    break;
-			case 1:
-					num1 = rand() % 100 + 1;
-					num2 = rand() % 100 + 1;
-					if (num1 < num2) 
-						swap(num1, num2);
-					result = num1 - num2;
-					cout << num1 << sign2<< num2 << '=' << " ";
-					break;
-			case 2:
-				do {	
-					num1 = rand() % 100 + 1;
-					num2 = rand() % 100 + 1;
-					result = num1 * num2;
-				}   while (result > 100||num1==1||num2==1);
-				    cout << num1 << plus<< num2 << '=' << " ";
-				    break;
-			case 3:
-				do {
-					num1 = rand() % 100 + 1;
-					num2 = rand() % 100 + 1;
-					result = num1 / num2;
-				}   while (num1 % num2 != 0||num2==1||num1==num2);
-				    cout << num1 << divide<< num2 << '=' << " ";
-				    break;
-			}
-			cin >> answer;
-			if (answer == result)
-				correctAnswer++;
-		}
-	}
-	auto end = chrono::system_clock::now();
-	double accuracy = 1.0*correctAnswer / numQuestions * 100;
-	chrono::duration<double> interval = end - start;
-	cout << "脮媒脠路脗脢拢潞" << accuracy<<"%" << endl;
-	cout << "脫脙脢卤拢潞" << interval.count()<<"脙毛"<< endl;
+class Vector {
+private:
+	int x, y;
+public:
+	Vector(int a, int b);
+	void display();
+	int getx();
+	int gety();
+	Vector Add(const Vector& ob2);
+	Vector Sub(const Vector& ob2);
+	int Mult(const Vector& ob2);
+};
+Vector::Vector(int a, int b) :x(a), y(b) {}
+
+void Vector::display(){
+	cout << "(" << x << "," << y << ")" << endl;
+}
+int Vector::getx() {
+	return x;
+}
+int Vector::gety() {
+	return y;
+}
+Vector Vector::Add(const Vector& ob2) {
+	return Vector(x + ob2.x, y + ob2.y);
+}
+Vector Vector::Sub(const Vector& ob2) {
+	return Vector(x - ob2.x, y - ob2.y);
+}
+int Vector::Mult(const Vector& ob2) {
+	return x * ob2.x + y * ob2.y;
+}
+int main() {
+	Vector v1(1, 2);
+	Vector v2(3, 4);
+	
+	cout << "Vector v1:";
+	v1.display();
+	
+	cout << "Vector v2:";
+	v2.display();
+	
+	Vector Add_ = v1.Add(v2);
+	cout << "矢量相加得：";
+	Add_.display();
+	
+	Vector Sub_ = v1.Sub(v2);
+	cout << "矢量相减得：";
+	Sub_.display();
+	
+	int Mult_ = v1.Mult(v2);
+	cout << "矢量相乘得：";
+	cout << Mult_ << endl;
+	return 0;
 }
