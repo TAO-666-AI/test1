@@ -1,3 +1,4 @@
+//鎴戞槸浣犵埞
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -9,8 +10,8 @@ int main()
 	int numQuestions = 20,num1,num2,result;
 	int correctAnswer = 0,answer;
 	char sign1 = '+',sign2='-';
-	char plus[] = "×";
-	char divide[] = "÷";
+	char plus[] = "隆脕";
+	char divide[] = "隆脗";
 	auto start = chrono::system_clock::now();
 	for (int i = 0; i < numQuestions / 4; i++) {
 		for (int j=0; j < 4; j++) {
@@ -56,6 +57,6 @@ int main()
 	auto end = chrono::system_clock::now();
 	double accuracy = 1.0*correctAnswer / numQuestions * 100;
 	chrono::duration<double> interval = end - start;
-	cout << "正确率：" << accuracy<<"%" << endl;
-	cout << "用时：" << interval.count()<<"秒"<< endl;
+	cout << "脮媒脠路脗脢拢潞" << accuracy<<"%" << endl;
+	cout << "脫脙脢卤拢潞" << interval.count()<<"脙毛"<< endl;
 }
