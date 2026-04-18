@@ -1,4 +1,3 @@
-//我是你爹
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
