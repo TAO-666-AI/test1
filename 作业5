@@ -1,0 +1,102 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define OK 1
+#define ERROR 0
+#define MAX 50
+
+typedef struct {
+    char ch[MAX];
+    int len;
+}SString;
+
+// ��ģʽ����next����
+void get_next(SString t, int next[]) {
+    int i = 0, j = -1;
+    next[0] = -1;
+    while (i < t.len) {
+        if (j == -1 || t.ch[i] == t.ch[j]) {
+            i++;
+            j++;
+            next[i] = j;
+        }
+        else {
+            j = next[j];
+        }
+    }
+}
+
+// KMP�㷨ʵ���ַ���ƥ��
+int KMP(SString s, SString t) {
+    int i = 0, j = 0;
+    int next[MAX];
+    get_next(t, next);
+    while (i < s.len && j < t.len) {
+        if (j == -1 || s.ch[i] == t.ch[j]) {
+            i++;
+            j++;
+        }
+        else {
+            j = next[j];
+        }
+    }
+    if (j >= t.len) {
+        return i - t.len;
+    }
+    return ERROR;
+}
+
+int StrIndex(SString s, SString t) {//ģʽ���������ļ�ƥ���㷨
+    int i, j, start;
+    if (t.len == 0)return ERROR;
+    start = 0;
+    i = start;
+    j = 0;
+    while (i < s.len && j < t.len) {
+        if (s.ch[i] == t.ch[j]) {
+            i++;
+            j++;
+        }
+        else {
+            start++;
+            i = start;
+            j = 0;
+        }
+    }
+    if (j >= t.len)return start;
+    else return ERROR;
+}
+void InitSString(SString *str, const char *_str) {
+    strcpy(str->ch, _str++);
+    str->len = strlen(_str);
+}
+int main() {
+    SString s, t;
+    int order;
+    InitSString(&s, "ABABDABACDABABCABAB");
+    InitSString(&t, "ABABCABAB");
+    printf("��ģʽƥ���㷨--1��kmp�㷨--2\n");
+    scanf("%d", &order);
+    int result = KMP(s, t);
+    int _result = StrIndex(s, t);
+    switch(order) {
+    case 1:
+        if (result != ERROR) {
+            printf("ģʽ�����������״γ��ֵ�λ���ǣ�%d\n", result);
+        }
+        else {
+            printf("ģʽ����������δ�ҵ�\n");
+        }
+        break;
+    case 2:
+        if (_result != ERROR) {
+            printf("ģʽ�����������״γ��ֵ�λ���ǣ�%d\n", _result);
+        }
+        else {
+            printf("ģʽ����������δ�ҵ�\n");
+        }
+        break;
+    }
+    return 0;
+}
