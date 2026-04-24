@@ -1,0 +1,177 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+#include <stdlib.h>
+typedef int ElemType; 
+typedef struct Node {
+    ElemType data;
+    struct Node* next;
+} Node, * LinkList;
+
+void InitList(LinkList* L) {
+    *L = (Node*)malloc(sizeof(Node));
+    (*L)->next = NULL;
+}
+
+bool InsList(LinkList L, int i, ElemType e) {
+    Node* p = L;
+    int j = 0;
+    while (p && j < i - 1) {
+        p = p->next;
+        j++;
+    }
+    if (!p || j > i - 1) return false;
+    Node* s = (Node*)malloc(sizeof(Node));
+    s->data = e;
+    s->next = p->next;
+    p->next = s;
+    return true;
+}
+
+bool DelList(LinkList L, int i, ElemType* e) {
+    Node* p = L;
+    int j = 0;
+    while (p->next && j < i - 1) {
+        p = p->next;
+        j++;
+    }
+    if (!(p->next) || j > i - 1) return false;
+    Node* q = p->next;
+    p->next = q->next;
+    *e = q->data;
+    free(q);
+    return true;
+}
+
+void PrintfList(LinkList L) {
+    Node* p = L->next;
+    while (p) {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
+int LenList(LinkList L) {
+    int len = 0;
+    Node* p = L->next;
+    while (p) {
+        len++;
+        p = p->next;
+    }
+    return len;
+}
+void SortList(LinkList L) {
+    int len = LenList(L);
+    Node* p, * q;
+    ElemType temp;
+    for (int i = 0; i < len - 1; i++) {
+        p = L->next;
+        q = p->next;
+        for (int j = 0; j < len - i - 1; j++) {
+            if (p->data > q->data) {
+                temp = p->data;
+                p->data = q->data;
+                q->data = temp;
+            }
+            p = p->next;
+            q = q->next;
+        }
+    }
+}
+void RevList(LinkList L) {
+    Node* p = L->next, * q = NULL;
+    L->next = NULL;
+    while (p) {
+        Node* r = p->next;
+        p->next = q;
+        q = p;
+        p = r;
+    }
+    L->next = q;
+}
+void MergeList(LinkList La, LinkList Lb) {
+    Node* pa = La->next, * pb = Lb->next, * pre = La;
+    while (pa && pb) {
+        if (pa->data <= pb->data) {
+            pre->next = pa;
+            pre = pa;
+            pa = pa->next;
+        }
+        else {
+            pre->next = pb;
+            pre = pb;
+            pb = pb->next;
+        }
+    }
+    if (pa) pre->next = pa;
+    if (pb) pre->next = pb;
+    free(Lb);
+}
+
+int main() {
+    LinkList La, Lb;
+    InitList(&La);
+    InitList(&Lb);
+    int choice, pos;
+    ElemType value;
+    while (1) {
+        printf("请选择操作：\n");
+        printf("1 在La中插入元素;2 在La中删除元素;3 输出La中的元素;4 求La的长度;5 对La按值排序;6 逆置La;7 在Lb中插入元素;8 合并La和Lb;0. 退出\n");
+        scanf("%d", &choice);
+        switch (choice) {
+        case 1:
+            printf("请输入插入位置和元素值：");
+            scanf("%d %d", &pos, &value);
+            if (InsList(La, pos, value)) {
+                printf("插入成功\n");
+            }
+            else {
+                printf("插入失败\n");
+            }
+            break;
+        case 2:
+            printf("请输入删除位置：");
+            scanf("%d", &pos);
+            if (DelList(La, pos, &value)) {
+                printf("删除元素：%d\n", value);
+            }
+            else {
+                printf("删除失败\n");
+            }
+            break;
+        case 3:
+            printf("La中的元素为：");
+            PrintfList(La);
+            break;
+        case 4:
+            printf("La的长度为：%d\n", LenList(La));
+            break;
+        case 5:
+            SortList(La);
+            printf("排序完成\n");
+            break;
+        case 6:
+            RevList(La);
+            printf("逆置完成\n");
+            break;
+        case 7:
+            printf("请输入插入位置和元素值：");
+            scanf("%d %d", &pos, &value);
+            if (InsList(Lb, pos, value)) {
+                printf("插入成功\n");
+            }
+            else {
+                printf("插入失败\n");
+            }
+            break;
+        case 8:
+            MergeList(La, Lb);
+            printf("合并完成\n");
+            break;
+        case 0:
+            return 0;
+        default:
+            printf("输入错误，请重新选择\n");
+        }
+    }
+    return 0;
+}
