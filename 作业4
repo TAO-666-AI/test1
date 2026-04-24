@@ -1,0 +1,191 @@
+typedef struct {
+	QElemType element[MAXSIZE];
+	int front;
+	int rear;
+}SeqQueue;
+
+void InitQueue(SeqQueue* Q) {
+	Q->front = Q->rear =typedef struct {
+	SElemType elem[Stack_Size];
+	int top;
+}SeqStack;
+
+void InitStack(SeqStack* S) {
+	S->top =#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+#include <stdlib.h>
+typedef char SElemType;
+typedef int QElemType;
+#define Stack_Size 50
+#define ERROR 0
+#define OK 1
+#define MAXSIZE 50
+#include "��ҵ4-stack.h"
+#include "��ҵ4-queue.h"
+int main() {
+	char str1[] = "{[()]}";
+	char str2[] = "{{()]}";
+	char str3[] = "{[]";
+	char str4[] = "[]}";
+	BracketMatch(str1);
+	BracketMatch(str2);
+	BracketMatch(str3);
+	BracketMatch(str4);
+	Transformation(31, 2);
+	printf("\n");
+	Transformation(159, 8);
+	printf("\n");
+	Transformation(47, 16);
+	printf("\n");
+	YanghuiTriangle(7);
+	return 0;
+} -1;
+}
+
+bool IsFull(SeqStack* S) {
+	return S->top == Stack_Size - 1;
+}
+
+bool IsEmpty(SeqStack* S) {
+	return S->top == -1;
+}
+
+int Push(SeqStack* S, SElemType x) {
+	if (S->top == Stack_Size - 1)
+		return ERROR;
+	S->top++;
+	S->elem[S->top] = x;
+	return OK;
+}
+
+int Pop(SeqStack* S, SElemType* x) {
+	if (S->top == -1)
+		return ERROR;
+	else {
+		*x = S->elem[S->top];
+		S->top--;
+		return OK;
+	}
+}
+int GetTop(SeqStack* S, SElemType* x) {
+	if (S->top == -1)
+		return ERROR;
+	else {
+		*x = S->elem[S->top];
+		return OK;
+	}
+}
+int Match(char a, char b) {
+	if (a == '(' && b == ')' || a == '[' && b == ']' || a == '{' && b == '}') {
+		return OK;
+	}
+	else
+		return ERROR;
+}
+void BracketMatch(char* str) {//˳��ջ��������ƥ���Ӧ��
+	SeqStack S;
+	int i;
+	char ch;
+	InitStack(&S);
+	for (i = 0; str[i] != '\0'; i++) {
+		switch (str[i]) {
+		case'(':
+		case'[':
+		case'{':
+			Push(&S, str[i]);
+			break;
+		case')':
+		case']':
+		case'}':
+			if (IsEmpty(&S)) {
+				printf("�����Ŷ��࣡\n");
+				return;
+			}
+			else {
+				GetTop(&S, &ch);
+				if (Match(ch, str[i]))
+					Pop(&S, &ch);
+				else {
+					printf("��Ӧ���������Ų�ͬ�࣡\n");
+					return;
+				}
+			}
+		}
+	}
+	if (IsEmpty(&S))
+		printf("����ƥ�䣡\n");
+	else
+		printf("�����Ŷ��࣡\n");
+}
+void Transformation(int n, int base) {//˳��ջ���ڽ���ת����Ӧ��
+	SeqStack S;
+	SElemType x;
+	InitStack(&S);
+	while (n) {
+		x = n % base;
+		Push(&S, x);
+		n /= base;
+	}
+	while (!IsEmpty(&S)) {
+		Pop(&S, &x);
+		if (x < 10)
+			printf("%d", x);
+		else
+			printf("%c", x - 10 + 'A');
+	}
+}
+ 0;
+}
+
+bool _IsFull(SeqQueue* Q) {
+	return (Q->rear + 1) % MAXSIZE == Q->front;
+}
+
+bool _IsEmpty(SeqQueue* Q) {
+	return Q->rear == Q->front;
+}
+
+int EnterQueue(SeqQueue* Q, QElemType x) {
+	if (_IsFull(Q))
+		return ERROR;
+	Q->element[Q->rear] = x;
+	Q->rear = (Q->rear + 1) % MAXSIZE;
+	return OK;
+}
+
+int DeleteQueue(SeqQueue* Q, QElemType* x) {
+	if (_IsEmpty(Q))
+		return ERROR;
+	*x = Q->element[Q->front];
+	Q->front = (Q->front + 1) % MAXSIZE;
+	return OK;
+}
+
+void YanghuiTriangle(int n) {//ѭ�����й���������ǵ�Ӧ��
+	SeqQueue q;
+	InitQueue(&q);
+	EnterQueue(&q, 1);
+
+	for (int row = 0; row < n; row++) {
+		// ��ӡÿ��ǰ��Ŀո�
+		for (int space = 0; space < n - row - 1; space++) {
+			printf("   ");
+		}
+
+		int prev = 0;
+		for (int col = 0; col <= row; col++) {
+			int num;
+			if (col == row) {
+				num = 1;
+			}
+			else {
+				DeleteQueue(&q, &num);
+			}
+			int next_num = prev + num;
+			EnterQueue(&q, next_num);
+			printf("%6d", num);
+			prev = num;
+		}
+		printf("\n");
+	}
+}
